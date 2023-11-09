@@ -1,9 +1,11 @@
 cmake_minimum_required(VERSION 3.27)
 
 project(
-  TensorLearn
-  VERSION 1.0
-  LANGUAGES CXX)
+    TensorLearn
+    VERSION 1.0
+    LANGUAGES CXX)
 
 
-add_executable(TensorLearn main.cpp)
+file(GLOB SRC_FILES src/*.cpp)
+
+add_executable(TensorLearn ${SRC_FILES})
