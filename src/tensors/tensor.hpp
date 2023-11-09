@@ -5,4 +5,4 @@ class Tensor{
 
     private:
     
-}
+};
