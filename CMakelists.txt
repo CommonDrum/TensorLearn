@@ -1,11 +1,30 @@
 cmake_minimum_required(VERSION 3.27)
+set(CMAKE_CXX_STANDARD 11)
 
-project(
-    TensorLearn
-    VERSION 1.0
-    LANGUAGES CXX)
-
+project(TensorLearn VERSION 1.0)
 
 file(GLOB SRC_FILES src/*.cpp)
 
-add_executable(TensorLearn ${SRC_FILES})
+if(APPLE)
+    file(GLOB APPLE_IMGUI_FILES vendor/imgui/backends/imgui_impl_metal.h vendor/imgui/backends/imgui_impl_metal.mm)
+    set(SRC_FILES ${SRC_FILES} ${APPLE_IMGUI_FILES})
+endif()
+
+set(IMGUI_SOURCES
+    vendor/imgui/imgui.cpp
+    vendor/imgui/imgui_draw.cpp
+    vendor/imgui/imgui_widgets.cpp
+    vendor/imgui/imgui_tables.cpp
+)
+
+include_directories(vendor/imgui)
+
+add_executable(TensorLearn ${SRC_FILES} ${IMGUI_SOURCES})
+
+if(APPLE)
+    find_library(METAL_LIBRARY Metal)
+    find_library(METALKIT_LIBRARY MetalKit)
+    find_library(FOUNDATION_LIBRARY Foundation)
+    find_library(QUARTZCORE_LIBRARY QuartzCore)
+    target_link_libraries(TensorLearn ${METAL_LIBRARY} ${METALKIT_LIBRARY} ${FOUNDATION_LIBRARY} ${QUARTZCORE_LIBRARY})
+endif()
